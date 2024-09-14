@@ -2,10 +2,16 @@ import React from "react";
 import * as S from "./UserPage.styles";
 import { useDispatch, useSelector } from "react-redux";
 
+import {
+  actions as routeActions,
+  types as routes,
+} from "../../reducers/routes.actions";
+
 import { useForm } from "react-hook-form";
 import { actions } from "../../reducers/user.actions";
 import { ControlledTextField } from "../../components/inputs";
-import { Button, Container, Paper } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 
 const UserPage = () => {
   const dispatch = useDispatch();
@@ -35,6 +41,17 @@ const UserPage = () => {
 
   return (
     <S.UserPageContainer>
+      <div>
+        <IconButton
+          color="inherit"
+          onClick={() =>
+            dispatch(routeActions.redirectTo(routes.HOME, { id: "" }))
+          }
+        >
+          <ArrowBack />
+        </IconButton>
+      </div>
+
       <h2>Usuário #{id}</h2>
 
       <S.PeperContainer>
@@ -66,7 +83,9 @@ const UserPage = () => {
             />
           </S.GridContainer>
           <S.ButtonContainer>
-            <Button variant="contained" type={"submit"}>GRAVAR</Button>
+            <Button variant="contained" type={"submit"}>
+              GRAVAR
+            </Button>
           </S.ButtonContainer>
         </form>
       </S.PeperContainer>

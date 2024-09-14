@@ -11,6 +11,7 @@ export const UserPageContainer = styled.main`
     font-size: 1.5rem;
     color: ${(props) => props.theme["gray-100"]};
     margin-bottom: 1rem;
+    margin-top: 1rem;
   }
 `;
 
