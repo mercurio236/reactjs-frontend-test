@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as S from "./TableUsers.styles";
 import { DeleteOutline, Edit } from "@mui/icons-material";
 import {
@@ -8,8 +8,17 @@ import {
 import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import { calculateAge } from "../../utils/calculateAge";
+import { DialogDeleteUser } from "../DialogDeleteUser/DialogDeleteUser";
 
 export function TableUsers({ data }) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteUser, setDeleteUser] = useState({});
+
+  async function handleDeleteUser(dataUser) {
+    setDeleteUser(dataUser);
+    setShowDeleteModal(true);
+  }
+
   const dispatch = useDispatch();
   return (
     <S.UserListContainer>
@@ -45,7 +54,11 @@ export function TableUsers({ data }) {
                       >
                         <Edit />
                       </Button>
-                      <Button variant="contained" color="error">
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDeleteUser(u)}
+                      >
                         <DeleteOutline />
                       </Button>
                     </S.ButtonActions>
@@ -56,6 +69,12 @@ export function TableUsers({ data }) {
           </tbody>
         </table>
       </S.UserList>
+      <DialogDeleteUser
+        open={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        title="Deletar usuário"
+        data={deleteUser}
+      />
     </S.UserListContainer>
   );
 }
