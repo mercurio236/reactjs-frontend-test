@@ -34,6 +34,7 @@ const ControlledTextField = ({
         <TextField
           {...otherProps}
           value={value}
+          
           error={isError}
           helperText={
             !isError
