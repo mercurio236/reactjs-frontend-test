@@ -9,8 +9,8 @@ import {
 
 import { useForm } from "react-hook-form";
 import { actions } from "../../reducers/user.actions";
-import { ControlledTextField } from "../../components/inputs";
-import { Button, IconButton } from "@mui/material";
+import { ControlledTextField, ZipCodeTextField } from "../../components/inputs";
+import { Button, IconButton, TextField } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 
 const UserPage = () => {
@@ -63,12 +63,15 @@ const UserPage = () => {
               formProps={formProps}
               variant="filled"
             />
+
             <ControlledTextField
               label="CEP"
               name={"cep"}
               formProps={formProps}
               variant="filled"
+              isZipCode
             />
+
             <ControlledTextField
               label="Cidade"
               name={"cidade"}

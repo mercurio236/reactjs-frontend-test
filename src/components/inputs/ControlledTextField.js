@@ -2,12 +2,14 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { getValueFromObject } from "../../utils/basic";
+import ZipCodeTextField from "./ZipCodeTextField";
 
 const ControlledTextField = ({
   formProps,
   name,
   validationKey,
   ignoreError = false,
+  isZipCode = false,
   ...otherProps
 }) => {
   const {
@@ -30,34 +32,63 @@ const ControlledTextField = ({
           ? { a: () => true }
           : getValueFromObject(rules, validationKey ?? name)
       }
-      render={({ field: { onChange, onBlur, value } }) => (
-        <TextField
-          {...otherProps}
-          value={value}
-          
-          error={isError}
-          helperText={
-            !isError
-              ? otherProps.helperText
-              : !ignoreError
-              ? getValueFromObject(errors, name)?.message ??
-                otherProps.helperText
-              : undefined
-          }
-          onChange={(v) => {
-            onChange(v);
-            if (!!otherProps.onChange) {
-              otherProps.onChange(v);
+      render={({ field: { onChange, onBlur, value, ref } }) =>
+        isZipCode ? (
+          <ZipCodeTextField
+            {...otherProps}
+            customInput={TextField}
+            value={value}
+            error={isError}
+            helperText={
+              !isError
+                ? otherProps.helperText
+                : !ignoreError
+                ? getValueFromObject(errors, name)?.message ??
+                  otherProps.helperText
+                : undefined
             }
-          }}
-          onBlur={() => {
-            onBlur();
-            if (!!otherProps.onBlur) {
-              otherProps.onBlur(value);
+            onChange={(v) => {
+              onChange(v);
+              if (!!otherProps.onChange) {
+                otherProps.onChange(v);
+              }
+            }}
+            onBlur={() => {
+              onBlur();
+              if (!!otherProps.onBlur) {
+                otherProps.onBlur(value);
+              }
+            }}
+            ref={ref}
+          />
+        ) : (
+          <TextField
+            {...otherProps}
+            value={value}
+            error={isError}
+            helperText={
+              !isError
+                ? otherProps.helperText
+                : !ignoreError
+                ? getValueFromObject(errors, name)?.message ??
+                  otherProps.helperText
+                : undefined
             }
-          }}
-        />
-      )}
+            onChange={(v) => {
+              onChange(v);
+              if (!!otherProps.onChange) {
+                otherProps.onChange(v);
+              }
+            }}
+            onBlur={() => {
+              onBlur();
+              if (!!otherProps.onBlur) {
+                otherProps.onBlur(value);
+              }
+            }}
+          />
+        )
+      }
     />
   );
 };
