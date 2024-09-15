@@ -88,7 +88,7 @@ const deleteUser = asyncFlow({
       url: `/usuario/${values.id}`,
       method: "delete",
       isMock: true,
-      mockResult: { id: values.id }
+      mockResult: { id: values.id },
     });
   },
   postSuccess: function* ({ response }) {
@@ -99,10 +99,12 @@ const deleteUser = asyncFlow({
   },
 });
 
+
+
 export const sagas = [
   userRouteWatcher(),
   loadUser.watcher(),
   saveUser.watcher(),
   deleteUser.watcher(),
-  getUser.watcher()
+  getUser.watcher(),
 ];

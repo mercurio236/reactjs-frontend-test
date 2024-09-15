@@ -9,6 +9,7 @@ import {
 
 import { useForm } from "react-hook-form";
 import { actions } from "../../reducers/user.actions";
+import { actions as searchzipcode } from "../../reducers/searchzipcode.actions";
 import { ControlledTextField } from "../../components/inputs";
 import { Button, IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
@@ -16,6 +17,7 @@ import { ArrowBack } from "@mui/icons-material";
 const UserPage = () => {
   const dispatch = useDispatch();
   const { loading, data, id } = useSelector((state) => state.user);
+  const { result } = useSelector((state) => state.zipcode);
   const rules = {};
   const initialValues = {
     nome: "",
@@ -28,12 +30,21 @@ const UserPage = () => {
   const formProps = {
     ...useForm(),
     rules,
-    initialValues,
+    initialValues
   };
 
   const handleSubmit = (values) => {
     dispatch(actions.saveUser.request(values));
   };
+
+  function handleGetAddress() {
+    const getZipcode = formProps.getValues("cep");
+    if (getZipcode) {
+      dispatch(searchzipcode.searchZipCode.request(getZipcode));
+      formProps.setValue("cidade", result.localidade);
+      formProps.setValue("uf", result.uf);
+    }
+  }
 
   if (loading) {
     return <div>Carregando usuário</div>;
@@ -70,6 +81,7 @@ const UserPage = () => {
               formProps={formProps}
               variant="filled"
               isZipCode
+              onBlur={handleGetAddress}
             />
 
             <ControlledTextField

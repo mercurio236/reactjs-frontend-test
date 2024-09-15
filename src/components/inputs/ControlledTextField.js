@@ -27,6 +27,7 @@ const ControlledTextField = ({
       name={name}
       control={control}
       disabled={otherProps.disabled}
+      defaultValue={''}
       rules={
         otherProps.disabled
           ? { a: () => true }

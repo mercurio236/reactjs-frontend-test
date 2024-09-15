@@ -5,7 +5,7 @@ const initialState = {
   id: null,
   data: [],
   loading: false,
-  modalShow: false
+  modalShow: false,
 };
 
 const reducer = (state = initialState, action) => {
