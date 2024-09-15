@@ -9,8 +9,8 @@ import {
 
 import { useForm } from "react-hook-form";
 import { actions } from "../../reducers/user.actions";
-import { ControlledTextField, ZipCodeTextField } from "../../components/inputs";
-import { Button, IconButton, TextField } from "@mui/material";
+import { ControlledTextField } from "../../components/inputs";
+import { Button, IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 
 const UserPage = () => {

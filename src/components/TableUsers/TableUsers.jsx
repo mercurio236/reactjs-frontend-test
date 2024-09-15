@@ -5,18 +5,22 @@ import {
   actions as routeActions,
   types as routes,
 } from "../../reducers/routes.actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@mui/material";
 import { calculateAge } from "../../utils/calculateAge";
 import { DialogDeleteUser } from "../DialogDeleteUser/DialogDeleteUser";
+import { actions } from "../../reducers/user.actions";
 
 export function TableUsers({ data }) {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteUser, setDeleteUser] = useState({});
+  const state = useSelector((state) => state.user);
 
-  async function handleDeleteUser(dataUser) {
-    setDeleteUser(dataUser);
-    setShowDeleteModal(true);
+  async function handleOpenModalDataUser(dataUser) {
+    dispatch(actions.getUser.request(dataUser));
+    
+  }
+
+  async function handleDeleteUser(userData) {
+    dispatch(actions.deleteUser.request({ id: userData.id }));
   }
 
   const dispatch = useDispatch();
@@ -57,7 +61,7 @@ export function TableUsers({ data }) {
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() => handleDeleteUser(u)}
+                        onClick={() => handleOpenModalDataUser(u)}
                       >
                         <DeleteOutline />
                       </Button>
@@ -70,10 +74,11 @@ export function TableUsers({ data }) {
         </table>
       </S.UserList>
       <DialogDeleteUser
-        open={showDeleteModal}
-        handleClose={() => setShowDeleteModal(false)}
+        open={state.modalShow}
+        handleClose={() => dispatch(actions.getUser.request({ modalShow: false }))}
+        handleDelete={(e) => handleDeleteUser(e)}
         title="Deletar usuário"
-        data={deleteUser}
+        data={state.data}
       />
     </S.UserListContainer>
   );

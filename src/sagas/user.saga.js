@@ -34,6 +34,25 @@ const loadUser = asyncFlow({
   },
 });
 
+const getUser = asyncFlow({
+  actionGenerator: actions.getUser,
+  transform: function* () {
+    const id = yield select((state) => state.user.id);
+    return { id };
+  },
+  api: (values) => {
+    return request({
+      url: `/usuario/${values.id}`,
+      method: "get",
+      isMock: true,
+      mockResult: usersMock.find((u) => u.id === values.id) ?? null,
+    });
+  },
+  postSuccess: function* ({ response }) {
+    console.log({ user: response.data });
+  },
+});
+
 const saveUser = asyncFlow({
   actionGenerator: actions.saveUser,
   transform: function* (payload) {
@@ -54,8 +73,36 @@ const saveUser = asyncFlow({
   },
 });
 
+const deleteUser = asyncFlow({
+  actionGenerator: actions.deleteUser,
+  transform: function* () {
+    const id = yield select((state) => state.user.id);
+    return { id };
+  },
+  api: (values) => {
+    const index = usersMock.findIndex((u) => u.id === values.id);
+    if (index > -1) {
+      usersMock.splice(index, 1); // Remove o usuário da lista mocada
+    }
+    return request({
+      url: `/usuario/${values.id}`,
+      method: "delete",
+      isMock: true,
+      mockResult: { id: values.id }
+    });
+  },
+  postSuccess: function* ({ response }) {
+    const id = response.data.id;
+    yield put(actions.deleteUser.success(id));
+
+    console.log({ user: response.data });
+  },
+});
+
 export const sagas = [
   userRouteWatcher(),
   loadUser.watcher(),
   saveUser.watcher(),
+  deleteUser.watcher(),
+  getUser.watcher()
 ];

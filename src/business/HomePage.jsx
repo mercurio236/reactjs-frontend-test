@@ -11,7 +11,6 @@ const HomePage = () => {
   if (loading) {
     return <div>Carregando usuários</div>;
   }
-
   return (
     <Container>
       <TableUsers data={data}/>
