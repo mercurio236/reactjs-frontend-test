@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import * as S from "./TableUsers.styles";
-import { DeleteOutline, Edit } from "@mui/icons-material";
+import { Add, DeleteOutline, Edit } from "@mui/icons-material";
 import {
   actions as routeActions,
   types as routes,
@@ -16,7 +16,6 @@ export function TableUsers({ data }) {
 
   async function handleOpenModalDataUser(dataUser) {
     dispatch(actions.getUser.request(dataUser));
-    
   }
 
   async function handleDeleteUser(userData) {
@@ -26,7 +25,7 @@ export function TableUsers({ data }) {
   const dispatch = useDispatch();
   return (
     <S.UserListContainer>
-      <h1>Usuários</h1>
+      
       <S.UserList>
         <table>
           <thead>
@@ -75,7 +74,9 @@ export function TableUsers({ data }) {
       </S.UserList>
       <DialogDeleteUser
         open={state.modalShow}
-        handleClose={() => dispatch(actions.getUser.request({ modalShow: false }))}
+        handleClose={() =>
+          dispatch(actions.getUser.request({ modalShow: false }))
+        }
         handleDelete={(e) => handleDeleteUser(e)}
         title="Deletar usuário"
         data={state.data}

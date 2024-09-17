@@ -2,14 +2,9 @@ import styled from "styled-components";
 
 export const UserListContainer = styled.main`
   flex: 1;
-  padding: 3.5rem;
+  padding: 0rem 3rem 0rem 3rem;
   display: flex;
   flex-direction: column;
-
-  h1 {
-    font-size: 1.5rem;
-    color: ${(props) => props.theme["gray-100"]};
-  }
 `;
 
 export const UserList = styled.div`
