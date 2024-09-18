@@ -8,8 +8,8 @@ import { HomeContainer } from "./HomePage.styles";
 import { DialogAddUser } from "../../components/DialogAddUser/DialogAddUser";
 
 const HomePage = () => {
-  const [modalAction, setModalAction] = useState(false);
   const { loading, data } = useSelector((state) => state.home);
+  const [modalAction, setModalAction] = useState(false);
 
   if (loading) {
     return <div>Carregando usuários</div>;
@@ -31,7 +31,6 @@ const HomePage = () => {
         handleClose={() => setModalAction(false)}
         open={modalAction}
         title="Criar usuário"
-        handleSave={() => {}}
       />
     </Container>
   );

@@ -1,5 +1,36 @@
 {
-    "users": [
-    
-    ]
-  }
+  "users": [
+    {
+      "id": "bacc",
+      "nome": "Arley Souto Aguiar",
+      "dataNascimento": "1995-04-20",
+      "cep": "73340-105",
+      "cidade": "Brasília",
+      "uf": "DF"
+    },
+    {
+      "id": "b08f",
+      "nome": "Arley Souto Aguiar",
+      "dataNascimento": "2001-05-22",
+      "cep": "73340-105",
+      "cidade": "Brasília",
+      "uf": "DF"
+    },
+    {
+      "id": "6cc7",
+      "nome": "Arley Souto Aguiar",
+      "dataNascimento": "2022-02-12",
+      "cep": "73340-105",
+      "cidade": "Brasília",
+      "uf": "DF"
+    },
+    {
+      "id": "d9d3",
+      "nome": "Arley Souto Aguiar",
+      "dataNascimento": "1999-02-12",
+      "cep": "73340-105",
+      "cidade": "Brasília",
+      "uf": "DF"
+    }
+  ]
+}

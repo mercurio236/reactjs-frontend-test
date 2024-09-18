@@ -9,6 +9,9 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actions.loadUsers.REQUEST:
     case actions.loadUsers.SUCCESS:
+      return {
+        data: action.payload
+      };
     case actions.loadUsers.FAILURE:
       return {
         ...state,

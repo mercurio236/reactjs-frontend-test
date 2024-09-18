@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { actions as searchzipcode } from "../../reducers/searchzipcode.actions";
+import { actions as userActions } from "../../reducers/user.actions";
 
-export function DialogAddUser({ open, handleClose, title, handleSave }) {
+export function DialogAddUser({ open, handleClose, title }) {
   const rules = {};
   const dispatch = useDispatch();
   const { result } = useSelector((state) => state.zipcode);
@@ -37,9 +38,16 @@ export function DialogAddUser({ open, handleClose, title, handleSave }) {
     }
   }
 
-  const handleSubmit = (values) => {
-    console.log(values)
-    //dispatch(actions.saveUser.request(values));
+  const handleSubmit = async (values) => {
+    await dispatch(userActions.saveUser.request(values));
+    handleClose(false);
+    formProps.reset({
+      nome: "",
+      dataNascimento: "",
+      cep: "",
+      cidade: "",
+      uf: "",
+    });
   };
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
@@ -59,6 +67,8 @@ export function DialogAddUser({ open, handleClose, title, handleSave }) {
                 name={"dataNascimento"}
                 formProps={formProps}
                 variant="filled"
+                InputLabelProps={{ shrink: true }}
+                type="date"
               />
 
               <ControlledTextField
@@ -86,13 +96,10 @@ export function DialogAddUser({ open, handleClose, title, handleSave }) {
           </S.DivTextInfo>
         </DialogContent>
         <DialogActions>
-          <Button type="button" onClick={handleClose}>Sair</Button>
-          <Button
-            onClick={() => handleSave()}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <Button type="button" onClick={handleClose}>
+            Sair
+          </Button>
+          <Button variant="contained" color="primary" type="submit">
             Salvar
           </Button>
         </DialogActions>

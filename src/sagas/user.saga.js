@@ -7,13 +7,34 @@ import {
 } from "../reducers/routes.actions";
 import { actions } from "../reducers/user.actions";
 import { request } from "../utils/api";
-import usersMock from "./users.mock";
+import { actions as reloadHome } from "../reducers/home.actions";
 
 function* userRouteWatcher() {
   yield routeWatcher(routes.USER, function* () {
     yield put(actions.loadUser.request());
   });
 }
+
+const updateUSer = asyncFlow({
+  actionGenerator: actions.updateUSer,
+  transform: function* (payload) {
+    const id = yield select((state) => state.user.id);
+    return { id, ...payload };
+  },
+  api: (values) => {
+    return request({
+      url: `/users/${values.id}`,
+      method: "put",
+      body: values
+    });
+  },
+  postSuccess: function* ({ response }) {
+    yield put(actions.updateUSer.success(response.data));
+  },
+  postFailure: function* (error) {
+    yield put(actions.updateUSer.failure(error.message));
+  },
+});
 
 const loadUser = asyncFlow({
   actionGenerator: actions.loadUser,
@@ -23,14 +44,15 @@ const loadUser = asyncFlow({
   },
   api: (values) => {
     return request({
-      url: `/usuario/${values.id}`,
-      method: "get",
-      isMock: true,
-      mockResult: usersMock.find((u) => u.id === values.id) ?? null,
+      url: `/users/${values.id}`,
+      method: "get"
     });
   },
   postSuccess: function* ({ response }) {
-    console.log({ user: response.data });
+    yield put(routeActions.loadUser.success(response.data));
+  },
+  postFailure: function* (error) {
+    yield put(actions.loadUser.failure(error.message));
   },
 });
 
@@ -42,34 +64,33 @@ const getUser = asyncFlow({
   },
   api: (values) => {
     return request({
-      url: `/usuario/${values.id}`,
+      url: `/users/${values.id}`,
       method: "get",
-      isMock: true,
-      mockResult: usersMock.find((u) => u.id === values.id) ?? null,
     });
   },
   postSuccess: function* ({ response }) {
-    console.log({ user: response.data });
+    yield put(actions.getUser.success(response.data));
+  },
+  postFailure: function* (error) {
+    yield put(actions.getUser.failure(error.message));
   },
 });
 
 const saveUser = asyncFlow({
   actionGenerator: actions.saveUser,
-  transform: function* (payload) {
-    const id = yield select((state) => state.user.id);
-    return { id, ...payload };
-  },
-  api: ({ id, ...values }) => {
+  api: (values) => {
     return request({
-      url: `/usuario/${id}`,
-      method: "put",
+      url: `/users`,
+      method: "post",
       body: values,
-      isMock: true,
-      mockResult: {},
     });
   },
-  postSuccess: function* () {
-    yield put(routeActions.redirectTo(routes.HOME));
+  postSuccess: function* (response) {
+    yield put(actions.saveUser.success(response.data));
+    yield put(reloadHome.loadUsers.request());
+  },
+  postFailure: function* (error) {
+    yield put(actions.saveUser.failure(error.message));
   },
 });
 
@@ -80,26 +101,20 @@ const deleteUser = asyncFlow({
     return { id };
   },
   api: (values) => {
-    const index = usersMock.findIndex((u) => u.id === values.id);
-    if (index > -1) {
-      usersMock.splice(index, 1); // Remove o usuário da lista mocada
-    }
     return request({
-      url: `/usuario/${values.id}`,
+      url: `/users/${values.id}`,
       method: "delete",
-      isMock: true,
-      mockResult: { id: values.id },
     });
   },
   postSuccess: function* ({ response }) {
     const id = response.data.id;
     yield put(actions.deleteUser.success(id));
-
-    console.log({ user: response.data });
+    yield put(reloadHome.loadUsers.request());
+  },
+  postFailure: function* (error) {
+    yield put(actions.deleteUser.failure(error.message));
   },
 });
-
-
 
 export const sagas = [
   userRouteWatcher(),
@@ -107,4 +122,5 @@ export const sagas = [
   saveUser.watcher(),
   deleteUser.watcher(),
   getUser.watcher(),
+  updateUSer.watcher()
 ];

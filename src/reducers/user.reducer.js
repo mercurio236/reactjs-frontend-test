@@ -6,6 +6,7 @@ const initialState = {
   data: [],
   loading: false,
   modalShow: false,
+  user: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -16,7 +17,15 @@ const reducer = (state = initialState, action) => {
         id: action.payload.id,
       };
     case actions.loadUser.REQUEST:
+      return {
+        ...state,
+        data: action.payload,
+      };
     case actions.loadUser.SUCCESS:
+      return {
+        ...state,
+        user: action.payload.response.data,
+      };
     case actions.loadUser.FAILURE:
       return {
         ...state,
@@ -26,12 +35,38 @@ const reducer = (state = initialState, action) => {
             ? action.payload.response.data
             : [],
       };
+    case actions.saveUser.REQUEST:
+      return {
+        ...state,
+        modalCreateUser: false,
+      };
+    case actions.saveUser.SUCCESS:
+      return {
+        ...state,
+        data: state.data,
+      };
+    case actions.saveUser.FAILURE:
+      return {
+        ...state,
+        loading: action.type === actions.saveUser.REQUEST,
+        data:
+          action.type === actions.saveUser.SUCCESS
+            ? action.payload.response.data
+            : [],
+      };
     case actions.getUser.REQUEST:
       return {
+        ...state,
         id: action.payload.id,
-        modalShow: !!action.payload.id
+        modalShow: !!action.payload.id,
+        user: action.payload,
       };
     case actions.getUser.SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        modalShow: !!action.payload.id,
+      };
     case actions.getUser.FAILURE:
       return {
         ...state,
@@ -39,7 +74,27 @@ const reducer = (state = initialState, action) => {
         data:
           action.type === actions.getUser.SUCCESS
             ? action.payload.response.data
-            : []
+            : [],
+      };
+    case actions.updateUSer.REQUEST:
+      return {
+        ...state,
+        id: action.payload.id,
+        user: action.payload,
+      };
+    case actions.updateUSer.SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case actions.updateUSer.FAILURE:
+      return {
+        ...state,
+        loading: action.type === actions.updateUSer.REQUEST,
+        data:
+          action.type === actions.updateUSer.SUCCESS
+            ? action.payload.response.data
+            : [],
       };
     case actions.deleteUser.REQUEST:
       return {
@@ -47,11 +102,11 @@ const reducer = (state = initialState, action) => {
         id: action.payload.id,
       };
     case actions.deleteUser.SUCCESS:
-      return{
+      return {
         ...state,
-        data: [state.data].filter(user => user.id !== action.payload.id),
-        modalShow: false
-      }
+        data: state.data,
+        modalShow: false,
+      };
     case actions.deleteUser.FAILURE:
       return {
         ...state,

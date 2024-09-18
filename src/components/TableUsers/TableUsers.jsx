@@ -37,7 +37,7 @@ export function TableUsers({ data }) {
             </tr>
           </thead>
           <tbody>
-            {data.map((u) => {
+            {data?.map((u) => {
               return (
                 <tr key={u.id}>
                   <td>{u.nome}</td>
@@ -79,7 +79,7 @@ export function TableUsers({ data }) {
         }
         handleDelete={(e) => handleDeleteUser(e)}
         title="Deletar usuário"
-        data={state.data}
+        data={state.user}
       />
     </S.UserListContainer>
   );

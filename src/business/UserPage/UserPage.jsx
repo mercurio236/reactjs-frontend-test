@@ -16,7 +16,7 @@ import { ArrowBack } from "@mui/icons-material";
 
 const UserPage = () => {
   const dispatch = useDispatch();
-  const { loading, data, id } = useSelector((state) => state.user);
+  const { loading, data, id, user } = useSelector((state) => state.user);
   const { result } = useSelector((state) => state.zipcode);
   const rules = {};
   const initialValues = {
@@ -28,13 +28,13 @@ const UserPage = () => {
     ...data,
   };
   const formProps = {
-    ...useForm(),
+    ...useForm({ values: user }),
     rules,
-    initialValues
+    initialValues,
   };
 
   const handleSubmit = (values) => {
-    dispatch(actions.saveUser.request(values));
+    dispatch(actions.updateUSer.request(values));
   };
 
   function handleGetAddress() {

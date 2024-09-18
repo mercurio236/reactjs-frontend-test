@@ -5,4 +5,6 @@ export const actions = {
   saveUser: createAsyncAction("@user/SAVE"),
   deleteUser: createAsyncAction("@user/DELETE"),
   getUser: createAsyncAction("@user/GETUSER"),
+  updateUSer: createAsyncAction("@user/UPDATEUSER"),
+
 };

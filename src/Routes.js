@@ -20,11 +20,13 @@ const { reducer, middleware, enhancer } = connectRoutes(routePaths, {
   basename: process.env.REACT_APP_BASE_CONTEXT,
 });
 
+
 export { reducer, middleware, enhancer };
 
 const Container = () => {
   const routeCode = useSelector((state) => state.location.type);
   const Route = routePages[routeCode] ?? routePages[NOT_FOUND];
+  console.log(routeCode)
 
   return <Route />;
 };
